@@ -3,9 +3,10 @@ Programa concorrente para somar os elementos de um vetor de floats,
 considerando que a entrada será lida dos arquivos gerados.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
 #include<pthread.h>
+#include <math.h>
 
 #define TESTE
 
@@ -120,12 +121,6 @@ int main(int argc, char *argv[]) {
 
    //aguarda o termino das threads
    for(int i=0; i<nthreads; i++) {
-      retorno = (tArgs*) malloc(sizeof(tArgs));
-      if(retorno == NULL) {
-         printf("\n--ERRO: malloc()\n"); 
-         pthread_exit(NULL);
-      }
-
       if(pthread_join(*(tid+i), (void**) &retorno)){
          fprintf(stderr, "\nERRO--pthread_join\n");
          return 6;
@@ -135,6 +130,7 @@ int main(int argc, char *argv[]) {
 
    //exibe o valor do somatorio encontrado de forma concorrente
    printf("Somatorio encontrado: %f\n", somaGeral);
+   printf("Erro (absoluto): %.10f\n", fabs(somaSequencial - somaGeral));
 
    //libera as areas de memoria alocadas
    free(vetor);
